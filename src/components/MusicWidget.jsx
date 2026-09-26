@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from 'react'
 import { Play, Pause, SkipForward, SkipBack, Music, Volume2 } from 'lucide-react'
 
 const TRACKS = [
-  { id: 1, title: 'Open Road Anthem', artist: 'Chrome Stacks', color: '#6366f1', duration: 180 },
-  { id: 2, title: 'Highway Run', artist: 'The Truckers', color: '#ec4899', duration: 210 },
-  { id: 3, title: 'Midnight Drive', artist: 'Long Haul', color: '#14b8a6', duration: 240 },
-  { id: 4, title: 'Diesel Heart', artist: '18 Wheels', color: '#f59e0b', duration: 195 },
-  { id: 5, title: 'Convoy Sunset', artist: 'Flatbed Kings', color: '#ef4444', duration: 225 }
+  { id: 1, title: 'Open Road Anthem', artist: 'Chrome Stacks', color: '#6366f1', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+  { id: 2, title: 'Highway Run', artist: 'The Truckers', color: '#ec4899', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+  { id: 3, title: 'Midnight Drive', artist: 'Long Haul', color: '#14b8a6', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+  { id: 4, title: 'Diesel Heart', artist: '18 Wheels', color: '#f59e0b', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+  { id: 5, title: 'Convoy Sunset', artist: 'Flatbed Kings', color: '#ef4444', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' }
 ]
 
 export default function MusicWidget() {
@@ -15,40 +15,64 @@ export default function MusicWidget() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
   
+  const audioRef = useRef(null)
   const currentTrack = TRACKS[currentTrackIndex]
 
   useEffect(() => {
-    let interval;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setProgress(p => {
-          if (p >= 100) {
-            setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length)
-            return 0;
-          }
-          return p + (100 / (currentTrack.duration * 10)); // updates 10x a second
-        });
-      }, 100);
+    // Create audio element if it doesn't exist
+    if (!audioRef.current) {
+      audioRef.current = new Audio(currentTrack.url);
+      audioRef.current.addEventListener('timeupdate', () => {
+        if (audioRef.current && audioRef.current.duration) {
+          setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+        }
+      });
+      audioRef.current.addEventListener('ended', nextTrack);
     }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentTrack.duration]);
+  }, []);
+
+  // Handle track changes
+  useEffect(() => {
+    if (audioRef.current) {
+      const wasPlaying = !audioRef.current.paused;
+      audioRef.current.src = currentTrack.url;
+      audioRef.current.load();
+      setProgress(0);
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Playback prevented:", e));
+      }
+    }
+  }, [currentTrackIndex]);
+
+  // Handle play/pause changes
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(e => {
+          console.error("Playback prevented:", e);
+          setIsPlaying(false);
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
 
   const togglePlay = () => setIsPlaying(!isPlaying);
 
   const selectTrack = (i) => {
     setCurrentTrackIndex(i)
-    setProgress(0)
     setIsPlaying(true)
   }
 
   const nextTrack = () => {
-    setCurrentTrackIndex((currentTrackIndex + 1) % TRACKS.length)
-    setProgress(0)
+    setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length)
+    setIsPlaying(true)
   }
 
   const prevTrack = () => {
-    setCurrentTrackIndex((currentTrackIndex - 1 + TRACKS.length) % TRACKS.length)
-    setProgress(0)
+    setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length)
+    setIsPlaying(true)
   }
 
   return (
