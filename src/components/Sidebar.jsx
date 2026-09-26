@@ -1,38 +1,53 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Truck, Wrench, DollarSign, MessageSquare } from 'lucide-react'
+import { LayoutDashboard, FileText, Truck, Wrench, DollarSign, MessageSquare, Users, Clock } from 'lucide-react'
 
 export default function Sidebar({ collapsed, setCollapsed }) {
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="brand" onClick={() => setCollapsed(!collapsed)}>
-        <Truck color="var(--primary)" size={32} />
+        <div className="brand-icon truck-drive">
+          <Truck color="var(--primary)" size={30} />
+        </div>
         <span>Fr8OrdR</span>
       </div>
       <div className="nav-links">
         <NavLink to="/" end title="Dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <LayoutDashboard size={20} />
+          <LayoutDashboard size={19} />
           <span>Dashboard</span>
         </NavLink>
         <NavLink to="/documents" title="Paperwork Hub" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <FileText size={20} />
+          <FileText size={19} />
           <span>Paperwork Hub</span>
+          <span className="nav-badge">3</span>
         </NavLink>
         <NavLink to="/shipments" title="Shipments" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <Truck size={20} />
+          <Truck size={19} />
           <span>Shipments</span>
         </NavLink>
+        <NavLink to="/fleet" title="Fleet & Drivers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <Users size={19} />
+          <span>Fleet & Drivers</span>
+        </NavLink>
+        <NavLink to="/hos" title="Hours of Service" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <Clock size={19} />
+          <span>HOS Tracker</span>
+        </NavLink>
         <NavLink to="/maintenance" title="Maintenance" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <Wrench size={20} />
+          <Wrench size={19} />
           <span>Maintenance</span>
         </NavLink>
         <NavLink to="/accounting" title="Accounting" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <DollarSign size={20} />
+          <DollarSign size={19} />
           <span>Accounting</span>
         </NavLink>
         <NavLink to="/messages" title="Messages" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-          <MessageSquare size={20} />
+          <MessageSquare size={19} />
           <span>Messages</span>
+          <span className="nav-badge">2</span>
         </NavLink>
+      </div>
+      <div className="sidebar-footer">
+        Fr8OrdR v1.0 — qamotech
       </div>
     </div>
   )
