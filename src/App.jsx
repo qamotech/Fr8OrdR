@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import { useState, useEffect, Suspense, lazy } from 'react'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
@@ -36,6 +36,12 @@ const GlobalLoader = () => (
 function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('fr8-theme') || 'dark')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 1024)
+  const navigate = useNavigate()
+
+  // Redirect to Dashboard (/) on refresh/initial load
+  useEffect(() => {
+    navigate('/')
+  }, [navigate])
 
   // Auto-collapse sidebar on resize (Improvement 6)
   useEffect(() => {
