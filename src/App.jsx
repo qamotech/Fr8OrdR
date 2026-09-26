@@ -23,6 +23,7 @@ const RoutePlanner = lazy(() => import('./pages/RoutePlanner'))
 const DriverScorecard = lazy(() => import('./pages/DriverScorecard'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
 const TermsOfService = lazy(() => import('./pages/TermsOfService'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
 // Global Loading Spinner (Improvement 15)
 const GlobalLoader = () => (
@@ -94,6 +95,7 @@ function App() {
                   <Route path="/driver-scorecard" element={<DriverScorecard />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
               <Footer />
