@@ -21,6 +21,7 @@ const NOTIFICATIONS = [
 
 export default function Header({ theme, toggleTheme }) {
   const [showNotifs, setShowNotifs] = useState(false)
+  const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [notifCount, setNotifCount] = useState(NOTIFICATIONS.length)
   const [clock, setClock] = useState('')
   const location = useLocation()
@@ -65,7 +66,16 @@ export default function Header({ theme, toggleTheme }) {
 
         <div className="search-bar" style={{ position: 'relative' }}>
           <Search size={16} color="var(--text-muted)" />
-          <input type="text" placeholder="Search loads, drivers..." />
+          <input 
+            type="text" 
+            placeholder="Search loads, drivers..." 
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                alert(`Searching for: ${e.target.value}`)
+                e.target.value = ''
+              }
+            }}
+          />
         </div>
         
         <button className="btn-secondary" onClick={toggleTheme} title="Toggle Theme" style={{ padding: '7px 9px' }}>
@@ -112,9 +122,44 @@ export default function Header({ theme, toggleTheme }) {
           )}
         </div>
         
-        <div className="user-profile hover-scale" onClick={() => navigate('/profile')} style={{ cursor: 'pointer', transition: 'transform 0.2s' }}>
-          <img src="/jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
-          <span style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
+        {/* Profile Dropdown Toggle */}
+        <div style={{ position: 'relative' }}>
+          <div className="user-profile hover-scale" onClick={() => setShowProfileMenu(!showProfileMenu)} style={{ cursor: 'pointer', transition: 'transform 0.2s', position: 'relative', zIndex: 100 }}>
+            <img src="/jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
+            <span className="hide-on-mobile" style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
+          </div>
+
+          {showProfileMenu && (
+            <>
+              {/* Click-outside backdrop */}
+              <div style={{ position: 'fixed', inset: 0, zIndex: 98 }} onClick={() => setShowProfileMenu(false)} />
+              
+              {/* Dropdown Menu */}
+              <div className="glass-panel animate-slide-up" style={{ position: 'absolute', top: '120%', right: 0, width: 260, padding: 0, zIndex: 99, boxShadow: '0 24px 48px rgba(0,0,0,0.3)', overflow: 'hidden' }}>
+                <div style={{ padding: 20, borderBottom: '1px solid var(--border)', background: 'var(--bg-panel)' }}>
+                  <div style={{ fontWeight: 700, fontSize: 16 }}>Jodi P.</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Fleet Dispatcher / Manager</div>
+                  <div style={{ marginTop: 12, fontSize: 12 }}>
+                    <div style={{ color: 'var(--text-muted)' }}>jodi.p@fr8ordr.app</div>
+                    <div style={{ color: 'var(--text-muted)' }}>+1 (555) 839-2041</div>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <button className="dropdown-item" onClick={toggleTheme} style={{ padding: '12px 20px', border: 'none', background: 'none', textAlign: 'left', color: 'var(--text-main)', cursor: 'pointer', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Theme</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+                  </button>
+                  <button className="dropdown-item" onClick={() => { setShowProfileMenu(false); navigate('/profile'); }} style={{ padding: '12px 20px', border: 'none', background: 'none', textAlign: 'left', color: 'var(--text-main)', cursor: 'pointer', borderBottom: '1px solid var(--border)' }}>
+                    Account Settings
+                  </button>
+                  <button className="dropdown-item" onClick={() => setShowProfileMenu(false)} style={{ padding: '12px 20px', border: 'none', background: 'none', textAlign: 'left', color: 'var(--danger)', cursor: 'pointer' }}>
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
