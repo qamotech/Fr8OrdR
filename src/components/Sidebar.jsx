@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Truck, Wrench, DollarSign, MessageSquare, Menu } from 'lucide-react'
+import { LayoutDashboard, FileText, Truck, Wrench, DollarSign, MessageSquare } from 'lucide-react'
 
 export default function Sidebar({ collapsed, setCollapsed }) {
   return (
@@ -9,7 +9,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         <span>Fr8OrdR</span>
       </div>
       <div className="nav-links">
-        <NavLink to="/" title="Dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+        <NavLink to="/" end title="Dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
         </NavLink>

@@ -1,4 +1,4 @@
-import { Truck, DollarSign, Package, AlertTriangle, CloudRain, Star, ChevronDown, ChevronUp } from 'lucide-react'
+import { Truck, DollarSign, Package, AlertTriangle, CloudRain, Star, ChevronDown } from 'lucide-react'
 
 export default function Dashboard() {
   return (
@@ -28,7 +28,7 @@ export default function Dashboard() {
           <div className="stat-value">$14,250.00</div>
           <p style={{ color: 'var(--success)', fontSize: '13px' }}>+12% vs last week</p>
         </div>
-        <div className="glass-card stat-card" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.1), rgba(15,17,26,0.8))' }}>
+        <div className="glass-card stat-card" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.08), var(--bg-card))' }}>
           <div className="stat-header">
             <span>Weather Route Alerts</span>
             <div className="stat-icon" style={{ color: '#38bdf8', background: 'rgba(56,189,248,0.1)' }}><CloudRain size={20} /></div>

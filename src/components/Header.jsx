@@ -1,8 +1,19 @@
-import { Bell, Search, Sun, Moon, CheckCheck } from 'lucide-react'
+import { Bell, Search, Sun, Moon } from 'lucide-react'
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
+
+const PAGE_SUBTITLES = {
+  '/': "Here's what's happening with the fleet today.",
+  '/documents': 'Upload, process, and manage all your paperwork.',
+  '/shipments': 'Track active loads and manage dispatches.',
+  '/maintenance': 'Stay on top of vehicle service and repairs.',
+  '/accounting': 'Invoices, payments, and financial overview.',
+  '/messages': 'Dispatch chat — stay connected with drivers.'
+}
 
 export default function Header({ theme, toggleTheme }) {
   const [notifications, setNotifications] = useState(3)
+  const location = useLocation()
   
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -11,35 +22,39 @@ export default function Header({ theme, toggleTheme }) {
     return 'Good evening';
   }
 
+  const subtitle = PAGE_SUBTITLES[location.pathname] || PAGE_SUBTITLES['/']
+
   return (
     <div className="top-header">
       <div className="header-title">
         <h1>{getGreeting()}, Jodi</h1>
-        <p>Here's what's happening with the fleet today.</p>
+        <p>{subtitle}</p>
       </div>
-      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
         <div className="search-bar">
           <Search size={18} color="var(--text-muted)" />
           <input type="text" placeholder="Search loads, drivers, or docs..." />
         </div>
         
-        <button className="btn-secondary" onClick={toggleTheme} title="Toggle Theme">
+        <button className="btn-secondary" onClick={toggleTheme} title="Toggle Theme" style={{ padding: '8px 10px' }}>
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
         
         <div style={{ position: 'relative' }}>
-          <button className="btn-secondary" title="Notifications">
+          <button className="btn-secondary" title="Notifications" onClick={() => setNotifications(0)} style={{ padding: '8px 10px' }}>
             <Bell size={20} />
-            {notifications > 0 && (
-              <span style={{ position: 'absolute', top: -5, right: -5, background: 'var(--danger)', color: 'white', borderRadius: '50%', width: 20, height: 20, fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {notifications}
-              </span>
-            )}
           </button>
           {notifications > 0 && (
-            <button onClick={() => setNotifications(0)} style={{ position: 'absolute', top: 40, right: 0, background: 'transparent', border: 'none', color: 'var(--primary)', fontSize: 12, cursor: 'pointer', display: 'flex', gap: 4, alignItems: 'center' }}>
-              <CheckCheck size={14} /> Mark Read
-            </button>
+            <span style={{
+              position: 'absolute', top: -6, right: -6,
+              background: 'var(--danger)', color: 'white',
+              borderRadius: '50%', width: 20, height: 20,
+              fontSize: 11, fontWeight: 700,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              pointerEvents: 'none'
+            }}>
+              {notifications}
+            </span>
           )}
         </div>
         
