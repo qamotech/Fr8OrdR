@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, FileText, Truck, Wrench, DollarSign, MessageSquare, Users, Clock } from 'lucide-react'
+import { LayoutDashboard, FileText, Truck, Wrench, DollarSign, MessageSquare, Users, Clock, Map, ClipboardList, Target } from 'lucide-react'
 
 export default function Sidebar({ collapsed, setCollapsed }) {
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
-      <div className="brand" onClick={() => setCollapsed(!collapsed)}>
+      <div className="brand" onClick={() => setCollapsed(!collapsed)} title="Toggle Sidebar">
         <div className="brand-icon truck-drive">
           <Truck color="var(--primary)" size={30} />
         </div>
@@ -24,6 +24,21 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           <Truck size={19} />
           <span>Shipments</span>
         </NavLink>
+        
+        {/* NEW FEATURE LINKS */}
+        <NavLink to="/load-board" title="Load Board" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <ClipboardList size={19} />
+          <span>Load Board</span>
+        </NavLink>
+        <NavLink to="/route-planner" title="Route Planner" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <Map size={19} />
+          <span>Route Planner</span>
+        </NavLink>
+        <NavLink to="/driver-scorecard" title="Driver Scorecard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <Target size={19} />
+          <span>Driver Scorecard</span>
+        </NavLink>
+
         <NavLink to="/fleet" title="Fleet & Drivers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
           <Users size={19} />
           <span>Fleet & Drivers</span>
@@ -47,7 +62,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         </NavLink>
       </div>
       <div className="sidebar-footer">
-        Fr8OrdR v1.0 — qamotech
+        Fr8OrdR v2.0
       </div>
     </div>
   )
