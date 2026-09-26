@@ -1,6 +1,6 @@
 import { Bell, Search, Sun, Moon, Clock } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const PAGE_SUBTITLES = {
   '/': "Here's what's happening with the fleet today.",
@@ -24,6 +24,7 @@ export default function Header({ theme, toggleTheme }) {
   const [notifCount, setNotifCount] = useState(NOTIFICATIONS.length)
   const [clock, setClock] = useState('')
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const tick = () => {
@@ -111,12 +112,10 @@ export default function Header({ theme, toggleTheme }) {
           )}
         </div>
         
-        <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div className="user-profile hover-scale" style={{ cursor: 'pointer', transition: 'transform 0.2s' }}>
-            <img src="/jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
-            <span style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
-          </div>
-        </Link>
+        <div className="user-profile hover-scale" onClick={() => navigate('/profile')} style={{ cursor: 'pointer', transition: 'transform 0.2s' }}>
+          <img src="/jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
+          <span style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
+        </div>
       </div>
     </div>
   )
