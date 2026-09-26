@@ -34,7 +34,14 @@ const GlobalLoader = () => (
 )
 
 function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem('fr8-theme') || 'dark')
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('fr8-theme')
+    if (saved) return saved
+    if (!localStorage.getItem('fr8-theme-override') && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+    return 'dark'
+  })
   const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 1024)
   const navigate = useNavigate()
 
@@ -59,10 +66,6 @@ function App() {
       }
     }
     mediaQuery.addEventListener('change', handleChange)
-    // Initial check if no local storage preference exists
-    if (!localStorage.getItem('fr8-theme') && !localStorage.getItem('fr8-theme-override')) {
-      setTheme(mediaQuery.matches ? 'dark' : 'light')
-    }
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 

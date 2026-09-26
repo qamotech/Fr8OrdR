@@ -21,27 +21,31 @@ export default function MusicWidget() {
   useEffect(() => {
     // Create audio element if it doesn't exist
     if (!audioRef.current) {
-      audioRef.current = new Audio(currentTrack.url);
+      audioRef.current = new Audio();
       audioRef.current.addEventListener('timeupdate', () => {
         if (audioRef.current && audioRef.current.duration) {
           setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
         }
       });
-      audioRef.current.addEventListener('ended', nextTrack);
+      audioRef.current.addEventListener('ended', () => {
+        setCurrentTrackIndex(prev => (prev + 1) % TRACKS.length);
+        setIsPlaying(true);
+      });
     }
-  }, []);
+  }, []); // Run once on mount
 
   // Handle track changes
   useEffect(() => {
     if (audioRef.current) {
-      const wasPlaying = !audioRef.current.paused;
-      audioRef.current.src = currentTrack.url;
+      audioRef.current.src = TRACKS[currentTrackIndex].url;
       audioRef.current.load();
       setProgress(0);
+      // Play automatically if we were already playing, or let the isPlaying effect handle it
       if (isPlaying) {
         audioRef.current.play().catch(e => console.error("Playback prevented:", e));
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTrackIndex]);
 
   // Handle play/pause changes
