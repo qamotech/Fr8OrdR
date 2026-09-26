@@ -40,7 +40,7 @@ export default function Profile() {
           <div className="glass-panel" style={{ padding: 24, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ position: 'relative', marginBottom: 16 }}>
               <div style={{ width: 120, height: 120, borderRadius: '50%', overflow: 'hidden', border: '4px solid var(--bg-card)', boxShadow: 'var(--glass-shadow)' }}>
-                <img src="/jodi_avatar.jpg" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src="./jodi_avatar.jpg" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <button style={{ position: 'absolute', bottom: 0, right: 0, width: 36, height: 36, borderRadius: '50%', background: 'var(--primary)', border: 'none', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(99,102,241,0.4)' }} className="hover-scale">
                 <Camera size={16} />

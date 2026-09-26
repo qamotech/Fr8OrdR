@@ -125,7 +125,7 @@ export default function Header({ theme, toggleTheme }) {
         {/* Profile Dropdown Toggle */}
         <div style={{ position: 'relative' }}>
           <div className="user-profile hover-scale" onClick={() => setShowProfileMenu(!showProfileMenu)} style={{ cursor: 'pointer', transition: 'transform 0.2s', position: 'relative', zIndex: 100 }}>
-            <img src="/jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
+            <img src="./jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
             <span className="hide-on-mobile" style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
           </div>
 

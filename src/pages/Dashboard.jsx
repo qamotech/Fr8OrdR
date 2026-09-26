@@ -27,7 +27,7 @@ export default function Dashboard() {
       {/* Scroll-Driven Parallax Banner */}
       <div style={{ marginBottom: 24, borderRadius: 16, overflow: 'hidden', height: 260, position: 'relative', boxShadow: 'var(--glass-shadow)' }}>
         <img 
-          src="/hero_truck_banner.jpg" 
+          src="./hero_truck_banner.jpg" 
           alt="Fr8OrdR Logistics" 
           style={{ 
             width: '100%', 

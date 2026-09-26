@@ -164,7 +164,7 @@ export default function MusicWidget() {
           transform: isOpen ? 'scale(1.08)' : 'scale(1)'
         }}
       >
-        <img src="/truck_widget_icon.jpg" alt="Fr8 Radio" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src="./truck_widget_icon.jpg" alt="Fr8 Radio" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
     </div>
   )
