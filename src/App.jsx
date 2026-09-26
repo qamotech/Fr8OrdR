@@ -47,8 +47,11 @@ function App() {
 
   // Redirect to Dashboard (/) on refresh/initial load
   useEffect(() => {
-    navigate('/')
-  }, [navigate])
+    if (!sessionStorage.getItem('fr8-first-load')) {
+      sessionStorage.setItem('fr8-first-load', 'true')
+      navigate('/')
+    }
+  }, []) // Remove navigate dependency to guarantee it only runs on mount
 
   // Auto-collapse sidebar on resize (Improvement 6)
   useEffect(() => {
