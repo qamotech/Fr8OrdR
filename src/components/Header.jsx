@@ -1,6 +1,6 @@
 import { Bell, Search, Sun, Moon, Clock } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 
 const PAGE_SUBTITLES = {
   '/': "Here's what's happening with the fleet today.",
@@ -111,10 +111,12 @@ export default function Header({ theme, toggleTheme }) {
           )}
         </div>
         
-        <div className="user-profile">
-          <img src="/jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
-          <span style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
-        </div>
+        <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div className="user-profile hover-scale" style={{ cursor: 'pointer', transition: 'transform 0.2s' }}>
+            <img src="/jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
+            <span style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
+          </div>
+        </Link>
       </div>
     </div>
   )
