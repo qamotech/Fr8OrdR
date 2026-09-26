@@ -56,7 +56,7 @@ export default function Header({ theme, toggleTheme }) {
           <span style={{ fontVariantNumeric: 'tabular-nums' }}>{clock}</span>
         </div>
 
-        <div className="search-bar">
+        <div className="search-bar" style={{ position: 'relative' }}>
           <Search size={16} color="var(--text-muted)" />
           <input type="text" placeholder="Search loads, drivers..." />
         </div>
@@ -87,7 +87,10 @@ export default function Header({ theme, toggleTheme }) {
             <div className="notif-panel">
               <div className="notif-header">
                 <span>Notifications</span>
-                <button onClick={() => setShowNotifs(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}>Close</button>
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <button onClick={() => setNotifCount(0)} style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>Clear All</button>
+                  <button onClick={() => setShowNotifs(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}>Close</button>
+                </div>
               </div>
               {NOTIFICATIONS.map(n => (
                 <div key={n.id} className="notif-item">
