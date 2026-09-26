@@ -56,6 +56,12 @@ export default function Header({ theme, toggleTheme }) {
           <span style={{ fontVariantNumeric: 'tabular-nums' }}>{clock}</span>
         </div>
 
+        {/* Suggestion 2: Live Pulse Connection Status */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginRight: 10 }}>
+          <div className="pulse-glow" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--success)' }}></div>
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)' }}>Online</span>
+        </div>
+
         <div className="search-bar" style={{ position: 'relative' }}>
           <Search size={16} color="var(--text-muted)" />
           <input type="text" placeholder="Search loads, drivers..." />

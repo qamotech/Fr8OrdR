@@ -21,6 +21,8 @@ const Messages = lazy(() => import('./pages/Messages'))
 const LoadBoard = lazy(() => import('./pages/LoadBoard'))
 const RoutePlanner = lazy(() => import('./pages/RoutePlanner'))
 const DriverScorecard = lazy(() => import('./pages/DriverScorecard'))
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const TermsOfService = lazy(() => import('./pages/TermsOfService'))
 
 // Global Loading Spinner (Improvement 15)
 const GlobalLoader = () => (
@@ -40,12 +42,34 @@ function App() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // Suggestion 4: Dark Mode Auto-Sync with OS
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = (e) => {
+      if (!localStorage.getItem('fr8-theme-override')) {
+        setTheme(e.matches ? 'dark' : 'light')
+      }
+    }
+    mediaQuery.addEventListener('change', handleChange)
+    // Initial check if no local storage preference exists
+    if (!localStorage.getItem('fr8-theme') && !localStorage.getItem('fr8-theme-override')) {
+      setTheme(mediaQuery.matches ? 'dark' : 'light')
+    }
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('fr8-theme', theme)
   }, [theme])
 
-  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
+  const toggleTheme = () => {
+    setTheme(t => {
+      const newTheme = t === 'dark' ? 'light' : 'dark'
+      localStorage.setItem('fr8-theme-override', 'true') // mark as manually overridden
+      return newTheme
+    })
+  }
 
   return (
     <ErrorBoundary>
@@ -68,6 +92,8 @@ function App() {
                   <Route path="/load-board" element={<LoadBoard />} />
                   <Route path="/route-planner" element={<RoutePlanner />} />
                   <Route path="/driver-scorecard" element={<DriverScorecard />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-of-service" element={<TermsOfService />} />
                 </Routes>
               </Suspense>
               <Footer />

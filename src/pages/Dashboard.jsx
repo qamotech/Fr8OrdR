@@ -1,31 +1,51 @@
 import { useState, useEffect } from 'react'
-import { Truck, DollarSign, Package, AlertTriangle, CloudRain, Star, ChevronDown, TrendingUp, Fuel } from 'lucide-react'
+import { TrendingUp, Truck, AlertCircle, FileText, ArrowUpRight, ArrowDownRight, MapPin, Search, Calendar, ChevronRight, Share2, X, Download } from 'lucide-react'
 
-function AnimatedNumber({ value, prefix = '', suffix = '' }) {
-  const [display, setDisplay] = useState(0)
-  useEffect(() => {
-    const target = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.]/g, '')) : value
-    const step = target / 30
-    let current = 0
-    const timer = setInterval(() => {
-      current += step
-      if (current >= target) { setDisplay(target); clearInterval(timer); return }
-      setDisplay(Math.floor(current))
-    }, 30)
-    return () => clearInterval(timer)
-  }, [value])
-  return <>{prefix}{display.toLocaleString()}{suffix}</>
-}
+// Mock Data
+const ACTIVE_LOADS = [
+  { id: 'LD-8492', driver: 'Mike (Husband)', origin: 'Chicago, IL', dest: 'Dallas, TX', status: 'In Transit', eta: '4h 20m' },
+  { id: 'LD-8493', driver: 'Dave R.', origin: 'Atlanta, GA', dest: 'Miami, FL', status: 'Delayed', eta: 'Tomorrow, 2 PM' }
+]
 
 export default function Dashboard() {
+  const [scrollY, setScrollY] = useState(0)
+  const [showShareModal, setShowShareModal] = useState(false)
+
+  // Suggestion: Mesmerizing scroll-driven parallax effect
+  useEffect(() => {
+    const mainContent = document.querySelector('.scroll-area')
+    if (!mainContent) return
+    const handleScroll = () => {
+      setScrollY(mainContent.scrollTop)
+    }
+    mainContent.addEventListener('scroll', handleScroll, { passive: true })
+    return () => mainContent.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <div className="animate-fade-in">
-      <div style={{ marginBottom: 24, borderRadius: 16, overflow: 'hidden', height: 220, position: 'relative', boxShadow: 'var(--glass-shadow)' }}>
-        <img src="/hero_truck_banner.jpg" alt="Fr8OrdR Logistics" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(15,17,26,0.8), transparent)', display: 'flex', alignItems: 'center', padding: '0 32px' }}>
+      {/* Scroll-Driven Parallax Banner */}
+      <div style={{ marginBottom: 24, borderRadius: 16, overflow: 'hidden', height: 260, position: 'relative', boxShadow: 'var(--glass-shadow)' }}>
+        <img 
+          src="/hero_truck_banner.jpg" 
+          alt="Fr8OrdR Logistics" 
+          style={{ 
+            width: '100%', 
+            height: '140%', 
+            objectFit: 'cover',
+            transform: `translateY(-${scrollY * 0.4}px)`,
+            transition: 'transform 0.1s cubic-bezier(0,0,0.2,1)',
+            willChange: 'transform'
+          }} 
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(15,17,26,0.9) 10%, rgba(15,17,26,0.4) 60%, transparent)', display: 'flex', alignItems: 'center', padding: '0 40px' }}>
           <div>
-            <h2 style={{ color: 'white', fontSize: 28, fontWeight: 800, marginBottom: 8, letterSpacing: -0.5 }}>Command Your Fleet</h2>
-            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 15, maxWidth: 400 }}>Real-time analytics, routing, and dispatching all in one place.</p>
+            <h2 style={{ color: 'white', fontSize: 36, fontWeight: 800, marginBottom: 12, letterSpacing: -1 }}>Command Your Fleet</h2>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, maxWidth: 460, lineHeight: 1.5, marginBottom: 20 }}>Real-time analytics, routing, and dispatching. Keep your trucks moving and your paperwork seamless.</p>
+            {/* Suggestion 3: One-Click Share/Export Modal */}
+            <button className="btn-primary" onClick={() => setShowShareModal(true)} style={{ background: 'linear-gradient(135deg, var(--primary), #818cf8)', border: 'none', padding: '10px 20px' }}>
+              <Share2 size={16} style={{marginRight: 8}}/> Export Live Report
+            </button>
           </div>
         </div>
       </div>
@@ -33,153 +53,121 @@ export default function Dashboard() {
       <div className="grid-cards stagger-children">
         <div className="glass-card stat-card">
           <div className="stat-header">
-            <span>Active Loads</span>
-            <div className="stat-icon"><Truck size={18} /></div>
+            <span className="stat-label">Active Loads</span>
+            <div className="stat-icon-wrapper" style={{ background: 'var(--glow-primary)', color: 'var(--primary)' }}>
+              <Truck size={18} />
+            </div>
           </div>
-          <div className="stat-value"><AnimatedNumber value={4} /></div>
-          <p style={{ color: 'var(--success)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}><TrendingUp size={14} /> +1 from yesterday</p>
+          <div className="stat-value">12</div>
+          <div className="stat-trend positive">
+            <ArrowUpRight size={14} /> <span>+2 from yesterday</span>
+          </div>
         </div>
+        
         <div className="glass-card stat-card">
           <div className="stat-header">
-            <span>Pending Docs</span>
-            <div className="stat-icon" style={{ color: 'var(--warning)', background: 'rgba(245,158,11,0.1)' }}><Package size={18} /></div>
+            <span className="stat-label">Revenue (WTD)</span>
+            <div className="stat-icon-wrapper" style={{ background: 'var(--glow-success)', color: 'var(--success)' }}>
+              <TrendingUp size={18} />
+            </div>
           </div>
-          <div className="stat-value"><AnimatedNumber value={12} /></div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>3 require signature</p>
+          <div className="stat-value">$14,250</div>
+          <div className="stat-trend positive">
+            <ArrowUpRight size={14} /> <span>+18% vs last week</span>
+          </div>
         </div>
+
         <div className="glass-card stat-card">
           <div className="stat-header">
-            <span>Revenue (Week)</span>
-            <div className="stat-icon" style={{ color: 'var(--success)', background: 'rgba(16,185,129,0.1)' }}><DollarSign size={18} /></div>
+            <span className="stat-label">Fleet Issues</span>
+            <div className="stat-icon-wrapper" style={{ background: 'var(--glow-danger)', color: 'var(--danger)' }}>
+              <AlertCircle size={18} />
+            </div>
           </div>
-          <div className="stat-value"><AnimatedNumber value={14250} prefix="$" /></div>
-          <p style={{ color: 'var(--success)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: 4 }}><TrendingUp size={14} /> +12% vs last week</p>
-        </div>
-        <div className="glass-card stat-card">
-          <div className="stat-header">
-            <span>Fuel Costs</span>
-            <div className="stat-icon" style={{ color: 'var(--secondary)', background: 'rgba(236,72,153,0.1)' }}><Fuel size={18} /></div>
+          <div className="stat-value">2</div>
+          <div className="stat-trend negative">
+            <ArrowDownRight size={14} /> <span>Maintenance required</span>
           </div>
-          <div className="stat-value"><AnimatedNumber value={3820} prefix="$" /></div>
-          <p style={{ color: 'var(--danger)', fontSize: '12px' }}>↑ 8% vs last week</p>
         </div>
       </div>
 
-      {/* Weather Alert Banner */}
-      <div className="glass-card" style={{ padding: '14px 20px', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 14, background: 'rgba(56,189,248,0.06)', borderColor: 'rgba(56,189,248,0.2)' }}>
-        <CloudRain size={22} color="#38bdf8" />
-        <div style={{ flex: 1 }}>
-          <span style={{ fontWeight: 600, fontSize: 14 }}>Weather Alert: </span>
-          <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>Heavy rain on I-95 corridor — affecting Load #LD-8490 (Sam T.)</span>
-        </div>
-        <span className="badge badge-warning">⚡ Active</span>
-      </div>
-
-      <div className="dashboard-grid">
-        <div className="glass-panel" style={{ padding: '22px' }}>
-          <div className="section-title">
-            <span>Recent Shipments</span>
-            <button className="btn-secondary" style={{ padding: '5px 12px', fontSize: '12px' }}>View All</button>
+      <div className="dashboard-grid stagger-children" style={{ marginTop: 24 }}>
+        <div className="glass-panel" style={{ padding: 22 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700 }}>Live Tracking</h3>
+            <button className="btn-secondary" style={{ padding: '6px 12px', fontSize: 12 }}>View Map</button>
           </div>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Load ID <ChevronDown size={12} style={{display: 'inline', marginLeft: 3, opacity: 0.5}}/></th>
-                <th>Destination</th>
-                <th>Driver</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ fontWeight: 600 }}>#LD-8492</td>
-                <td>Chicago, IL</td>
-                <td>Mike (Husband)</td>
-                <td><span className="badge badge-info"><span className="live-pulse" style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: 'var(--primary)' }} /> In Transit</span></td>
-              </tr>
-              <tr>
-                <td style={{ fontWeight: 600 }}>#LD-8491</td>
-                <td>Dallas, TX</td>
-                <td>Dave R.</td>
-                <td><span className="badge badge-success">✓ Delivered</span></td>
-              </tr>
-              <tr>
-                <td style={{ fontWeight: 600 }}>#LD-8490</td>
-                <td>Atlanta, GA</td>
-                <td>Sam T.</td>
-                <td><span className="badge badge-warning">⚠ Delayed</span></td>
-              </tr>
-              <tr>
-                <td style={{ fontWeight: 600 }}>#LD-8489</td>
-                <td>Memphis, TN</td>
-                <td>Mike (Husband)</td>
-                <td><span className="badge badge-success">✓ Delivered</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 0 0 0', color: 'var(--text-muted)', fontSize: 12, borderTop: '1px solid var(--border)', marginTop: 14 }}>
-            <span>Showing 1-4 of 45</span>
-            <div style={{ display: 'flex', gap: 6 }}>
-              <button className="btn-secondary" style={{ padding: '3px 8px', fontSize: 12 }}>Prev</button>
-              <button className="btn-secondary" style={{ padding: '3px 8px', fontSize: 12 }}>Next</button>
-            </div>
+          <div className="activity-list">
+            {ACTIVE_LOADS.map((load, i) => (
+              <div key={i} className="activity-item">
+                <div className="activity-icon" style={{ background: load.status === 'Delayed' ? 'var(--glow-danger)' : 'var(--glow-primary)', color: load.status === 'Delayed' ? 'var(--danger)' : 'var(--primary)' }}>
+                  <MapPin size={16} />
+                </div>
+                <div className="activity-content">
+                  <h4>{load.driver} — {load.id}</h4>
+                  <p>{load.origin} → {load.dest}</p>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: load.status === 'Delayed' ? 'var(--danger)' : 'var(--text-main)' }}>{load.status}</div>
+                  <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>ETA: {load.eta}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div className="glass-panel" style={{ padding: '22px' }}>
-            <div className="section-title"><span>Driver Leaderboard</span></div>
-            <div className="activity-list stagger-children">
-              <div className="activity-item">
-                <div className="activity-icon" style={{ background: 'rgba(250,204,21,0.15)', color: '#facc15' }}><Star size={18} /></div>
-                <div className="activity-content">
-                  <h4>Mike (Husband)</h4>
-                  <p>3,240 mi this week</p>
-                </div>
-                <div className="activity-time" style={{ color: 'var(--success)', fontWeight: 700, fontSize: 13 }}>#1</div>
-              </div>
-              <div className="activity-item">
-                <div className="activity-icon"><Star size={18} color="var(--text-muted)"/></div>
-                <div className="activity-content">
-                  <h4>Dave R.</h4>
-                  <p>2,890 mi this week</p>
-                </div>
-                <div className="activity-time" style={{ fontWeight: 600 }}>#2</div>
-              </div>
-              <div className="activity-item">
-                <div className="activity-icon"><Star size={18} color="var(--text-muted)"/></div>
-                <div className="activity-content">
-                  <h4>Sam T.</h4>
-                  <p>2,410 mi this week</p>
-                </div>
-                <div className="activity-time">#3</div>
-              </div>
-            </div>
+        <div className="glass-panel" style={{ padding: 22 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700 }}>Pending Paperwork</h3>
+            <button className="btn-secondary" style={{ padding: '6px 12px', fontSize: 12 }}>Upload</button>
           </div>
-
-          <div className="glass-panel" style={{ padding: '22px' }}>
-            <div className="section-title"><span>Recent Uploads</span></div>
-            <div className="activity-list stagger-children">
-              <div className="activity-item">
-                <div className="activity-icon">📄</div>
-                <div className="activity-content">
-                  <h4>BOL - Load #LD-8491</h4>
-                  <p>Uploaded by Mike</p>
-                </div>
-                <div className="activity-time">2m ago</div>
+          <div className="activity-list">
+            <div className="activity-item">
+              <div className="activity-icon"><FileText size={16} /></div>
+              <div className="activity-content">
+                <h4>BOL for LD-8490</h4>
+                <p>Needs signature from Receiver</p>
               </div>
-              <div className="activity-item">
-                <div className="activity-icon">⛽</div>
-                <div className="activity-content">
-                  <h4>Fuel Receipt</h4>
-                  <p>Pilot Flying J — $450</p>
-                </div>
-                <div className="activity-time">1h ago</div>
+              <button className="btn-secondary" style={{ padding: 4 }}><ChevronRight size={16} /></button>
+            </div>
+            <div className="activity-item">
+              <div className="activity-icon"><FileText size={16} /></div>
+              <div className="activity-content">
+                <h4>Fuel Receipt</h4>
+                <p>Jodi P. uploaded 2h ago</p>
               </div>
+              <button className="btn-secondary" style={{ padding: 4 }}><ChevronRight size={16} /></button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      {showShareModal && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="glass-panel animate-slide-up" style={{ width: '100%', maxWidth: 400, padding: 24, boxShadow: '0 24px 48px rgba(0,0,0,0.2)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 style={{ fontSize: 18, fontWeight: 700 }}>Share Report</h3>
+              <button onClick={() => setShowShareModal(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={20}/></button>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20 }}>Generate a secure, read-only link or download a PDF of your current fleet status and revenue metrics.</p>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input type="text" readOnly value="https://fr8ordr.app/shared/rp-99x2" style={{ flex: 1, padding: '8px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--input-bg)', color: 'var(--text-main)' }} />
+                <button className="btn-primary" onClick={() => { alert('Copied to clipboard!'); setShowShareModal(false); }}>Copy Link</button>
+              </div>
+              <div style={{ position: 'relative', textAlign: 'center', margin: '10px 0' }}>
+                <hr style={{ borderColor: 'var(--border)', borderStyle: 'solid' }} />
+                <span style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)', background: 'var(--bg-card)', padding: '0 10px', fontSize: 12, color: 'var(--text-muted)' }}>OR</span>
+              </div>
+              <button className="btn-secondary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => { alert('Downloading PDF...'); setShowShareModal(false); }}>
+                <Download size={16} style={{marginRight: 8}}/> Download PDF Report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
