@@ -20,6 +20,16 @@ function AnimatedNumber({ value, prefix = '', suffix = '' }) {
 export default function Dashboard() {
   return (
     <div className="animate-fade-in">
+      <div style={{ marginBottom: 24, borderRadius: 16, overflow: 'hidden', height: 220, position: 'relative', boxShadow: 'var(--glass-shadow)' }}>
+        <img src="/hero_truck_banner.jpg" alt="Fr8OrdR Logistics" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(15,17,26,0.8), transparent)', display: 'flex', alignItems: 'center', padding: '0 32px' }}>
+          <div>
+            <h2 style={{ color: 'white', fontSize: 28, fontWeight: 800, marginBottom: 8, letterSpacing: -0.5 }}>Command Your Fleet</h2>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 15, maxWidth: 400 }}>Real-time analytics, routing, and dispatching all in one place.</p>
+          </div>
+        </div>
+      </div>
+
       <div className="grid-cards stagger-children">
         <div className="glass-card stat-card">
           <div className="stat-header">

@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { useState, useEffect, Suspense, lazy } from 'react'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import { ToastProvider } from './components/ToastProvider'
 import MusicWidget from './components/MusicWidget'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -69,6 +70,7 @@ function App() {
                   <Route path="/driver-scorecard" element={<DriverScorecard />} />
                 </Routes>
               </Suspense>
+              <Footer />
             </div>
           </div>
           <MusicWidget />
