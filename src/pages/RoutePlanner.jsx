@@ -1,10 +1,18 @@
 import { useState } from 'react'
-import { Map, Fuel, Navigation, Clock, Search } from 'lucide-react'
+import { Map, Fuel, Navigation } from 'lucide-react'
 
 export default function RoutePlanner() {
-  const [route, setRoute] = useState({ origin: '', dest: '' })
+  const [route, setRoute] = useState({ origin: 'Chicago, IL', dest: 'Dallas, TX' })
   const [calculating, setCalculating] = useState(false)
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState({
+    miles: 924,
+    time: '14h 20m',
+    fuelStops: [
+      { name: 'Pilot Flying J', loc: 'Gary, IN', price: 3.89, gal: 120 },
+      { name: "Love's Travel Stop", loc: 'Blytheville, AR', price: 3.75, gal: 80 }
+    ],
+    estFuelCost: 766.80
+  })
 
   const handlePlan = () => {
     if (!route.origin || !route.dest) return
@@ -31,7 +39,64 @@ export default function RoutePlanner() {
 
       <div className="dashboard-grid">
         <div className="glass-panel" style={{ padding: 22 }}>
-          <h3 style={{ fontSize: 15, marginBottom: 16 }}>Plan a Route</h3>
+          <h3 style={{ fontSize: 15, marginBottom: 12 }}>Plan a Route</h3>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{ padding: '4px 10px', fontSize: 11 }}
+              onClick={() => {
+                setRoute({ origin: 'Chicago, IL', dest: 'Dallas, TX' })
+                setResult({
+                  miles: 924,
+                  time: '14h 20m',
+                  fuelStops: [
+                    { name: 'Pilot Flying J', loc: 'Gary, IN', price: 3.89, gal: 120 },
+                    { name: "Love's Travel Stop", loc: 'Blytheville, AR', price: 3.75, gal: 80 }
+                  ],
+                  estFuelCost: 766.80
+                })
+              }}
+            >
+              ⚡ Chicago → Dallas
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{ padding: '4px 10px', fontSize: 11 }}
+              onClick={() => {
+                setRoute({ origin: 'Atlanta, GA', dest: 'Miami, FL' })
+                setResult({
+                  miles: 663,
+                  time: '9h 45m',
+                  fuelStops: [
+                    { name: 'TA Travel Center', loc: 'Valdosta, GA', price: 3.79, gal: 90 }
+                  ],
+                  estFuelCost: 595.90
+                })
+              }}
+            >
+              ⚡ Atlanta → Miami
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{ padding: '4px 10px', fontSize: 11 }}
+              onClick={() => {
+                setRoute({ origin: 'Denver, CO', dest: 'Phoenix, AZ' })
+                setResult({
+                  miles: 825,
+                  time: '13h 10m',
+                  fuelStops: [
+                    { name: 'Flying J', loc: 'Albuquerque, NM', price: 3.82, gal: 110 }
+                  ],
+                  estFuelCost: 698.50
+                })
+              }}
+            >
+              ⚡ Denver → Phoenix
+            </button>
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div>
               <label style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 6, display: 'block' }}>Origin</label>

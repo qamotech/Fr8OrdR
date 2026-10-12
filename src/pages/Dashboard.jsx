@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { TrendingUp, Truck, AlertCircle, FileText, ArrowUpRight, ArrowDownRight, MapPin, Search, Calendar, ChevronRight, Share2, X, Download } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { TrendingUp, Truck, AlertCircle, FileText, ArrowUpRight, ArrowDownRight, MapPin, ChevronRight, Share2, X, Download } from 'lucide-react'
 
 // Mock Data
 const ACTIVE_LOADS = [
@@ -8,6 +9,7 @@ const ACTIVE_LOADS = [
 ]
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [scrollY, setScrollY] = useState(0)
   const [showShareModal, setShowShareModal] = useState(false)
 
@@ -95,7 +97,7 @@ export default function Dashboard() {
         <div className="glass-panel" style={{ padding: 22 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <h3 style={{ fontSize: 16, fontWeight: 700 }}>Live Tracking</h3>
-            <button className="btn-secondary" onClick={() => alert('Opening full screen live map tracking...')} style={{ padding: '6px 12px', fontSize: 12 }}>View Map</button>
+            <button className="btn-secondary" onClick={() => navigate('/shipments')} style={{ padding: '6px 12px', fontSize: 12 }}>View Map</button>
           </div>
           <div className="activity-list">
             {ACTIVE_LOADS.map((load, i) => (
@@ -119,7 +121,7 @@ export default function Dashboard() {
         <div className="glass-panel" style={{ padding: 22 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <h3 style={{ fontSize: 16, fontWeight: 700 }}>Pending Paperwork</h3>
-            <button className="btn-secondary" onClick={() => alert('Opening file upload dialog...')} style={{ padding: '6px 12px', fontSize: 12 }}>Upload</button>
+            <button className="btn-secondary" onClick={() => navigate('/documents')} style={{ padding: '6px 12px', fontSize: 12 }}>Upload</button>
           </div>
           <div className="activity-list">
             <div className="activity-item">
@@ -128,7 +130,7 @@ export default function Dashboard() {
                 <h4 className="ellipsis">BOL for LD-8490</h4>
                 <p className="ellipsis">Needs signature from Receiver</p>
               </div>
-              <button className="btn-secondary" onClick={() => alert('Navigating to document details...')} style={{ padding: 4 }}><ChevronRight size={16} /></button>
+              <button className="btn-secondary" onClick={() => navigate('/documents')} style={{ padding: 4 }}><ChevronRight size={16} /></button>
             </div>
             <div className="activity-item">
               <div className="activity-icon"><FileText size={16} /></div>
@@ -136,7 +138,7 @@ export default function Dashboard() {
                 <h4 className="ellipsis">Fuel Receipt</h4>
                 <p className="ellipsis">Jodi P. uploaded 2h ago</p>
               </div>
-              <button className="btn-secondary" onClick={() => alert('Navigating to document details...')} style={{ padding: 4 }}><ChevronRight size={16} /></button>
+              <button className="btn-secondary" onClick={() => navigate('/documents')} style={{ padding: 4 }}><ChevronRight size={16} /></button>
             </div>
           </div>
         </div>

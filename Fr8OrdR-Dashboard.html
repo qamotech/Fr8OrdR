@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fr8OrdR - Trucking Logistics Dashboard</title>
+    <meta name="description" content="A premium single-file HTML logistics and trucking management dashboard. Track loads, manage dispatch, and calculate freight rates.">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
+    
+    <style>
+        :root {
+            --bg-base: #111827; --surface: #1f2937;
+            --text-main: #f9fafb; --text-muted: #9ca3af;
+            --primary: #f59e0b; --secondary: #10b981;
+            --border: #374151; --glass: rgba(31, 41, 55, 0.8);
+            --font-main: 'Inter', system-ui, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-main); background: var(--bg-base); color: var(--text-main); display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Header */
+        header { background: var(--glass); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--primary); }
+        nav a { color: var(--text-muted); text-decoration: none; margin-left: 1.5rem; font-weight: 600; }
+        nav a:hover { color: var(--text-main); }
+        
+        /* Hero / Map Image Area */
+        .hero-map {
+            width: 100%; height: 250px; background-color: #2d3748;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex; justify-content: center; align-items: center;
+            border-bottom: 1px solid var(--border); position: relative;
+        }
+        .hero-map::after { content: "LIVE FLEET TRACKING - ACTIVE"; font-weight: 900; letter-spacing: 0.2em; color: rgba(255,255,255,0.05); font-size: 3rem; position: absolute; }
+
+        /* Main Grid */
+        main { display: grid; grid-template-columns: 1fr 300px; gap: 2rem; padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; flex: 1; }
+        @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+        
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+        .card h3 { color: var(--primary); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        
+        /* Table */
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 0.75rem; border-bottom: 1px solid var(--border); }
+        th { color: var(--text-muted); text-transform: uppercase; font-size: 0.8rem; }
+        .status { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; }
+        .status.transit { background: rgba(16, 185, 129, 0.2); color: var(--secondary); }
+        .status.pending { background: rgba(245, 158, 11, 0.2); color: var(--primary); }
+
+        /* Sidebar Lists */
+        ul { list-style: none; }
+        ul li { margin-bottom: 0.75rem; }
+        ul a { color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        ul a:hover { color: var(--primary); }
+
+        /* Footer */
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 2rem; margin-top: auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+        footer div h4 { color: var(--primary); margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">🚛 Fr8OrdR Dispatch</div>
+        <nav>
+            <a href="#">Load Board</a>
+            <a href="#">Drivers</a>
+            <a href="#">Accounting</a>
+        </nav>
+    </header>
+
+    <div class="hero-map">
+        <!-- Structural Image / Map Placeholder -->
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+    </div>
+
+    <main>
+        <section>
+            <div class="card">
+                <h3>Active Freight Loads</h3>
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Origin</th><th>Destination</th><th>Rate</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>#F8-992</td><td>Dallas, TX</td><td>Chicago, IL</td><td>$2,450</td><td><span class="status transit">In Transit</span></td></tr>
+                        <tr><td>#F8-993</td><td>Atlanta, GA</td><td>Miami, FL</td><td>$1,800</td><td><span class="status pending">Pending pickup</span></td></tr>
+                        <tr><td>#F8-994</td><td>Denver, CO</td><td>Seattle, WA</td><td>$3,100</td><td><span class="status transit">In Transit</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <aside style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="card">
+                <h3>🛠️ Resources</h3>
+                <ul>
+                    <li><a href="#">📄 BOL Templates</a></li>
+                    <li><a href="#">🗺️ Routing API Docs</a></li>
+                    <li><a href="#">⛽ Fuel Surcharge Calc</a></li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>🔗 Suggested Sites</h3>
+                <ul>
+                    <li><a href="https://www.dat.com/" target="_blank">📈 DAT Load Board</a></li>
+                    <li><a href="https://www.fmcsa.dot.gov/" target="_blank">⚖️ FMCSA Regulations</a></li>
+                    <li><a href="https://truckstop.com/" target="_blank">🛑 Truckstop.com</a></li>
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <div>
+            <h4>Fr8OrdR Logistics System</h4>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Internal routing and dispatch management.</p>
+        </div>
+        <div>
+            <h4>Internal Links</h4>
+            <ul><li><a href="#">Admin Panel</a></li><li><a href="#">API Keys</a></li></ul>
+        </div>
+        <div style="color:var(--text-muted); font-size:0.9rem; align-self: flex-end;">
+            &copy; 2026 Fr8OrdR by qamotech.
+        </div>
+    </footer>
+
+</body>
+</html>

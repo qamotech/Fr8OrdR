@@ -1,19 +1,24 @@
 # 🚛📦 Fr8OrdR
 
-**Fleet-management and logistics dashboard with shipment, dispatch, route-planning, document, maintenance, and driver-scorecard interfaces.**
+**Enterprise Fleet-management and Logistics Command Center with shipment tracking, dispatch, route planning, document automation, maintenance scheduling, and driver performance telemetry.**
 
-🏷️ Maintained in [qamotech/Fr8OrdR](https://github.com/qamotech/Fr8OrdR) · 🌐 Public repository
+🏷️ Maintained in [qamotech/Fr8OrdR](https://github.com/qamotech/Fr8OrdR) · 🌐 Public repository  
+🚀 **Live Web Application:** [https://qamotech.github.io/Fr8OrdR/](https://qamotech.github.io/Fr8OrdR/)
 
 ## ✨ What is here
 
-- 🚚 Dashboard, fleet, shipments, and load-board screens.
-- 🗺️ Route planning and interactive map interfaces.
-- 📄 Documents, accounting, and maintenance workspaces.
-- 👤 Driver scorecards, profile settings, messages, and onboarding UI.
+- 🚚 **Fleet Command Center**: Real-time KPI telemetry, dispatch queues, live fleet status, and active load monitoring.
+- 🗺️ **Interactive Route Planner**: 1-click route presets (Chicago → Dallas, Atlanta → Miami, Denver → Phoenix) with fuel and toll calculations.
+- 📋 **Live Load Board**: One-click instant load booking and dispatch workflow with state tracking.
+- 🎯 **Guided Onboarding Tour**: Zero-beacon, non-intrusive interactive walkthrough of core operational modules.
+- 📄 **Digital Documents & Compliance**: Bill of Lading (BOL), Rate Confirmations, Proof of Delivery (POD), and automated invoicing.
+- 👤 **Driver Performance & Scorecards**: Telemetry metrics, safety scoring, hours of service (HOS), and driver onboarding.
+- ♿ **WCAG AA Compliance**: High-contrast modern dark palette engineered for dispatchers and fleet managers.
+- 📦 **Zero-Config Deployment**: Single-file distributable bundle deployed instantly on GitHub Pages alongside Vite modular source code.
 
 ## 🧭 Try the project
 
-Start with the dashboard, inspect a shipment, compare fleet and driver details, then explore document and route-planning screens using sample data.
+Visit the live demo directly at **[https://qamotech.github.io/Fr8OrdR/](https://qamotech.github.io/Fr8OrdR/)**, or clone the repository to run locally with Vite.
 
 ## 🚀 Local setup
 

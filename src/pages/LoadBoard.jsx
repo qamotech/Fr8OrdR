@@ -9,6 +9,7 @@ const LOADS = [
 
 export default function LoadBoard() {
   const [filter, setFilter] = useState('')
+  const [booked, setBooked] = useState(new Set())
 
   return (
     <div className="animate-fade-in">
@@ -34,6 +35,7 @@ export default function LoadBoard() {
               <th>Broker / Shipper <Building size={12} style={{display: 'inline'}} /></th>
               <th>Equip</th>
               <th>Rate / RPM</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -52,6 +54,19 @@ export default function LoadBoard() {
                 <td>
                   <div style={{ fontWeight: 600, color: 'var(--success)' }}>${l.rate.toLocaleString()}</div>
                   <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>${(l.rate / l.miles).toFixed(2)}/mi</div>
+                </td>
+                <td>
+                  {booked.has(l.id) ? (
+                    <span className="badge badge-success">✓ Booked & Dispatched</span>
+                  ) : (
+                    <button
+                      className="btn-primary"
+                      style={{ padding: '5px 12px', fontSize: '12px', whiteSpace: 'nowrap', cursor: 'pointer' }}
+                      onClick={() => setBooked(prev => new Set([...prev, l.id]))}
+                    >
+                      Book Load
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
