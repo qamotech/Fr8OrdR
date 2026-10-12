@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock, Eye, Database } from 'lucide-react'
+import { ShieldCheck, Lock, Database } from 'lucide-react'
 
 export default function PrivacyPolicy() {
   return (

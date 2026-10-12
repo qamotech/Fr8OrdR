@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useMemo } from 'react'
 import { CheckCircle, Info, AlertTriangle, X } from 'lucide-react'
 
 const ToastContext = createContext()
@@ -17,6 +17,13 @@ export function ToastProvider({ children }) {
     }, duration)
   }, [])
 
+  const toastValue = useMemo(() => {
+    return Object.assign((message, type, duration) => addToast(message, type, duration), {
+      addToast,
+      toast: addToast
+    })
+  }, [addToast])
+
   const icons = {
     success: <CheckCircle size={20} />,
     info: <Info size={20} />,
@@ -24,7 +31,7 @@ export function ToastProvider({ children }) {
   }
 
   return (
-    <ToastContext.Provider value={addToast}>
+    <ToastContext.Provider value={toastValue}>
       {children}
       <div className="toast-container">
         {toasts.map(t => (
@@ -39,6 +46,8 @@ export function ToastProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useToast() {
   return useContext(ToastContext)
 }
+

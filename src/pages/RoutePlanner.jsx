@@ -24,11 +24,11 @@ export default function RoutePlanner() {
         time: '14h 20m',
         fuelStops: [
           { name: 'Pilot Flying J', loc: 'Gary, IN', price: 3.89, gal: 120 },
-          { name: 'Love\'s Travel Stop', loc: 'Blytheville, AR', price: 3.75, gal: 80 }
+          { name: "Love's Travel Stop", loc: 'Blytheville, AR', price: 3.75, gal: 80 }
         ],
         estFuelCost: 766.80
       })
-    }, 1500)
+    }, 250)
   }
 
   return (
@@ -125,12 +125,11 @@ export default function RoutePlanner() {
           </div>
           
           <div style={{ height: 300, background: 'var(--input-bg)', position: 'relative', overflow: 'hidden' }}>
-            {/* Simulated map background panning */}
+            {/* Simulated map background styling */}
             <div style={{ 
               position: 'absolute', inset: -100, 
               background: 'radial-gradient(circle at 50% 50%, var(--glow-primary) 0%, transparent 60%)',
-              opacity: 0.5,
-              animation: 'spin 20s linear infinite' 
+              opacity: 0.35
             }} />
             
             {/* Map nodes */}

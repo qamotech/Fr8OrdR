@@ -1,6 +1,8 @@
 import { Truck, Map, PhoneCall, HelpCircle, Shield, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+const CURRENT_YEAR = new Date().getFullYear()
+
 export default function Footer() {
   return (
     <footer style={{ marginTop: 'auto', paddingTop: 60, paddingBottom: 40, borderTop: '1px solid var(--border)', background: 'var(--bg-panel)' }}>
@@ -16,7 +18,7 @@ export default function Footer() {
             The ultimate fleet management and dispatch platform designed specifically for owner-operators and small logistics teams.
           </p>
           <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-            © {new Date().getFullYear()} Fr8OrdR Tech. All rights reserved.
+            © {CURRENT_YEAR} Fr8OrdR Tech. All rights reserved.
           </div>
         </div>
 
@@ -24,11 +26,11 @@ export default function Footer() {
         <div>
           <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 16, color: 'var(--text-main)' }}>Industry Resources</h4>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <li><a href="https://www.fmcsa.dot.gov/" target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>FMCSA Guidelines</a></li>
-            <li><a href="https://www.iftach.org/" target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>IFTA Fuel Tax Calculator</a></li>
-            <li><a href="https://www.weather.gov/" target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>National Weather Service (NWS)</a></li>
-            <li><a href="https://www.dat.com/" target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>DAT Load Board Integration</a></li>
-            <li><a href="https://csa.fmcsa.dot.gov/" target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>DOT Compliance Checklist</a></li>
+            <li><a href="https://www.fmcsa.dot.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>FMCSA Guidelines</a></li>
+            <li><a href="https://www.iftach.org/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>IFTA Fuel Tax Calculator</a></li>
+            <li><a href="https://www.weather.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>National Weather Service (NWS)</a></li>
+            <li><a href="https://www.dat.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>DAT Load Board Integration</a></li>
+            <li><a href="https://csa.fmcsa.dot.gov/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, transition: 'color 0.2s' }}>DOT Compliance Checklist</a></li>
           </ul>
         </div>
 

@@ -9,6 +9,8 @@ const TRACKS = [
   { id: 5, title: 'Convoy Sunset', artist: 'Flatbed Kings', color: '#ef4444', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' }
 ]
 
+const RADIO_ICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='80' height='80' rx='16' fill='url(%23g)'/%3E%3Cpath d='M20 48 L20 32 L44 32 L56 42 L56 48 Z' fill='%23ffffff'/%3E%3Ccircle cx='28' cy='52' r='5' fill='%23ff914d'/%3E%3Ccircle cx='48' cy='52' r='5' fill='%23ff914d'/%3E%3C/svg%3E"
+
 export default function MusicWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
@@ -22,6 +24,7 @@ export default function MusicWidget() {
     // Create audio element if it doesn't exist
     if (!audioRef.current) {
       audioRef.current = new Audio();
+      audioRef.current.preload = 'none';
       audioRef.current.addEventListener('timeupdate', () => {
         if (audioRef.current && audioRef.current.duration) {
           setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
@@ -31,7 +34,34 @@ export default function MusicWidget() {
         setCurrentTrackIndex(prev => (prev + 1) % TRACKS.length);
         setIsPlaying(true);
       });
+      audioRef.current.addEventListener('error', () => {
+        setIsPlaying(false);
+      });
     }
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden' && audioRef.current && !audioRef.current.paused) {
+        // Option to pause audio or reduce processing when hidden
+      }
+    };
+    const handlePageHide = () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('pagehide', handlePageHide);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('pagehide', handlePageHide);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
   }, []); // Run once on mount
 
   // Handle track changes
@@ -40,9 +70,8 @@ export default function MusicWidget() {
       audioRef.current.src = TRACKS[currentTrackIndex].url;
       audioRef.current.load();
       setProgress(0);
-      // Play automatically if we were already playing, or let the isPlaying effect handle it
       if (isPlaying) {
-        audioRef.current.play().catch(e => console.error("Playback prevented:", e));
+        audioRef.current.play().catch(() => setIsPlaying(false));
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,8 +81,7 @@ export default function MusicWidget() {
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.play().catch(e => {
-          console.error("Playback prevented:", e);
+        audioRef.current.play().catch(() => {
           setIsPlaying(false);
         });
       } else {
@@ -80,7 +108,7 @@ export default function MusicWidget() {
   }
 
   return (
-    <div style={{ position: 'fixed', bottom: 24, left: 24, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12 }}>
+    <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 12 }}>
       
       {isOpen && (
         <div className="glass-panel animate-fade-in" style={{ padding: 20, width: 310 }}>
@@ -164,7 +192,7 @@ export default function MusicWidget() {
           transform: isOpen ? 'scale(1.08)' : 'scale(1)'
         }}
       >
-        <img src="./truck_widget_icon.jpg" alt="Fr8 Radio" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src={RADIO_ICON} alt="Fr8 Radio" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
     </div>
   )

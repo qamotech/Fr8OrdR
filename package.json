@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
+    "dev": "vite dev.html",
+    "build": "node scripts/build.js",
+    "lint": "oxlint src",
     "preview": "vite preview"
   },
   "dependencies": {

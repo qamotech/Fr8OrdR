@@ -19,37 +19,65 @@ const NOTIFICATIONS = [
   { id: 3, text: 'Mike uploaded BOL for Load #LD-8491', time: '2h ago', type: 'info' },
 ]
 
+export const JODI_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff914d'/%3E%3Cstop offset='100%25' stop-color='%23ff6b35'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='80' height='80' rx='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='32' r='14' fill='%23ffffff' opacity='0.9'/%3E%3Cpath d='M20 66 C20 48 60 48 60 66 Z' fill='%23ffffff' opacity='0.9'/%3E%3C/svg%3E"
+
 export default function Header({ theme, toggleTheme }) {
   const [showNotifs, setShowNotifs] = useState(false)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [notifCount, setNotifCount] = useState(NOTIFICATIONS.length)
   const [clock, setClock] = useState('')
+  const [greeting, setGreeting] = useState('Welcome')
   const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
-    const tick = () => {
+    let id = null
+    const updateTime = () => {
       const now = new Date()
       setClock(now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
+      const hour = now.getHours()
+      if (hour < 12) setGreeting('Good morning')
+      else if (hour < 18) setGreeting('Good afternoon')
+      else setGreeting('Good evening')
     }
-    tick()
-    const id = setInterval(tick, 30000)
-    return () => clearInterval(id)
-  }, [])
 
-  const getGreeting = () => {
-    const hour = new Date().getHours()
-    if (hour < 12) return 'Good morning'
-    if (hour < 18) return 'Good afternoon'
-    return 'Good evening'
-  }
+    const startTimer = () => {
+      if (!id) {
+        updateTime()
+        id = setInterval(updateTime, 30000)
+      }
+    }
+    const stopTimer = () => {
+      if (id) {
+        clearInterval(id)
+        id = null
+      }
+    }
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden') {
+        stopTimer()
+      } else {
+        startTimer()
+      }
+    }
+
+    startTimer()
+    document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('pagehide', stopTimer)
+    return () => {
+      stopTimer()
+      document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('pagehide', stopTimer)
+    }
+  }, [])
 
   const subtitle = PAGE_SUBTITLES[location.pathname] || PAGE_SUBTITLES['/']
 
   return (
     <div className="top-header">
       <div className="header-title">
-        <h1>{getGreeting()}, Jodi</h1>
+        <h1>{greeting}, Jodi</h1>
         <p>{subtitle}</p>
       </div>
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -58,7 +86,7 @@ export default function Header({ theme, toggleTheme }) {
           <span style={{ fontVariantNumeric: 'tabular-nums' }}>{clock}</span>
         </div>
 
-        {/* Suggestion 2: Live Pulse Connection Status */}
+        {/* Live Pulse Connection Status */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginRight: 10 }}>
           <div className="pulse-glow" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--success)' }}></div>
           <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)' }}>Online</span>
@@ -67,18 +95,20 @@ export default function Header({ theme, toggleTheme }) {
         <div className="search-bar" style={{ position: 'relative' }}>
           <Search size={16} color="var(--text-muted)" />
           <input 
+            id="global-search-input"
             type="text" 
-            placeholder="Search loads, drivers..." 
+            placeholder="Search loads, drivers... (/)" 
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                alert(`Searching for: ${e.target.value}`)
+              if (e.key === 'Enter' && e.target.value.trim()) {
+                const query = e.target.value.trim()
+                navigate(`/shipments?search=${encodeURIComponent(query)}`)
                 e.target.value = ''
               }
             }}
           />
         </div>
         
-        <button className="btn-secondary" onClick={toggleTheme} title="Toggle Theme" style={{ padding: '7px 9px' }}>
+        <button className="btn-secondary" onClick={toggleTheme} title="Toggle Theme (T)" style={{ padding: '7px 9px' }}>
           {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
         </button>
         
@@ -125,7 +155,7 @@ export default function Header({ theme, toggleTheme }) {
         {/* Profile Dropdown Toggle */}
         <div style={{ position: 'relative' }}>
           <div className="user-profile hover-scale" onClick={() => setShowProfileMenu(!showProfileMenu)} style={{ cursor: 'pointer', transition: 'transform 0.2s', position: 'relative', zIndex: 100 }}>
-            <img src="./jodi_avatar.jpg" alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
+            <img src={JODI_AVATAR} alt="Jodi P." style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
             <span className="hide-on-mobile" style={{ fontSize: '13px', fontWeight: '600' }}>Jodi P.</span>
           </div>
 

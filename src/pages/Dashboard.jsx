@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TrendingUp, Truck, AlertCircle, FileText, ArrowUpRight, ArrowDownRight, MapPin, ChevronRight, Share2, X, Download } from 'lucide-react'
+import { useToast } from '../components/ToastProvider'
 
 // Mock Data
 const ACTIVE_LOADS = [
@@ -8,20 +9,36 @@ const ACTIVE_LOADS = [
   { id: 'LD-8493', driver: 'Dave R.', origin: 'Atlanta, GA', dest: 'Miami, FL', status: 'Delayed', eta: 'Tomorrow, 2 PM' }
 ]
 
+const HERO_SVG_DATA = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201400%20500%22%3E%3Crect%20width%3D%221400%22%20height%3D%22500%22%20fill%3D%22%23111827%22%2F%3E%3Cpath%20d%3D%22M700%200h700v500H530z%22%20fill%3D%22%231e1b4b%22%2F%3E%3Ccircle%20cx%3D%221190%22%20cy%3D%2280%22%20r%3D%22210%22%20fill%3D%22%23312e81%22%2F%3E%3Cpath%20d%3D%22M0%20390h1400v110H0z%22%20fill%3D%22%230f172a%22%2F%3E%3Cpath%20d%3D%22M30%20443h130m85%200h130m85%200h130m85%200h130m85%200h130m85%200h130m85%200h130%22%20stroke%3D%22%23475569%22%20stroke-width%3D%225%22%2F%3E%3Cpath%20d%3D%22M700%20151h350v220H700z%22%20fill%3D%22%23a5b4fc%22%2F%3E%3Cpath%20d%3D%22M1051%20219h106l91%2091v61h-197z%22%20fill%3D%22%23e0e7ff%22%2F%3E%3Cpath%20d%3D%22M1080%20237h65l62%2067h-127z%22%20fill%3D%22%23312e81%22%2F%3E%3Cpath%20d%3D%22M683%20369h583%22%20stroke%3D%22%236366f1%22%20stroke-width%3D%2216%22%2F%3E%3Cg%20fill%3D%22%230f172a%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%2213%22%3E%3Ccircle%20cx%3D%22771%22%20cy%3D%22379%22%20r%3D%2235%22%2F%3E%3Ccircle%20cx%3D%22866%22%20cy%3D%22379%22%20r%3D%2235%22%2F%3E%3Ccircle%20cx%3D%221165%22%20cy%3D%22379%22%20r%3D%2235%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M739%20184h160m-160%2029h121%22%20stroke%3D%22%236366f1%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M0%2055h410M0%2083h290M0%20111h170%22%20stroke%3D%22%23334155%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M405%200v390M440%200v390%22%20stroke%3D%22%231e293b%22%20stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E"
+
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [scrollY, setScrollY] = useState(0)
   const [showShareModal, setShowShareModal] = useState(false)
+  const bannerImgRef = useRef(null)
+  const toast = useToast()
 
-  // Suggestion: Mesmerizing scroll-driven parallax effect
+  // High-performance rAF-throttled scroll parallax (zero React re-renders on scroll)
   useEffect(() => {
     const mainContent = document.querySelector('.scroll-area')
     if (!mainContent) return
+
+    let rafId = null
     const handleScroll = () => {
-      setScrollY(mainContent.scrollTop)
+      if (rafId) return
+      rafId = requestAnimationFrame(() => {
+        if (bannerImgRef.current) {
+          const offset = mainContent.scrollTop * 0.35
+          bannerImgRef.current.style.transform = `translate3d(0, -${offset}px, 0)`
+        }
+        rafId = null
+      })
     }
+
     mainContent.addEventListener('scroll', handleScroll, { passive: true })
-    return () => mainContent.removeEventListener('scroll', handleScroll)
+    return () => {
+      mainContent.removeEventListener('scroll', handleScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   return (
@@ -29,14 +46,14 @@ export default function Dashboard() {
       {/* Scroll-Driven Parallax Banner */}
       <div style={{ marginBottom: 24, borderRadius: 16, overflow: 'hidden', height: 260, position: 'relative', boxShadow: 'var(--glass-shadow)' }}>
         <img 
-          src="./hero_truck_banner.jpg" 
+          ref={bannerImgRef}
+          src={HERO_SVG_DATA} 
           alt="Fr8OrdR Logistics" 
           style={{ 
             width: '100%', 
             height: '140%', 
             objectFit: 'cover',
-            transform: `translateY(-${scrollY * 0.4}px)`,
-            transition: 'transform 0.1s cubic-bezier(0,0,0.2,1)',
+            transform: 'translate3d(0, 0, 0)',
             willChange: 'transform'
           }} 
         />
@@ -157,13 +174,13 @@ export default function Dashboard() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'flex', gap: 8 }}>
                 <input type="text" readOnly value="https://fr8ordr.app/shared/rp-99x2" style={{ flex: 1, padding: '8px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--input-bg)', color: 'var(--text-main)' }} />
-                <button className="btn-primary" onClick={() => { alert('Copied to clipboard!'); setShowShareModal(false); }}>Copy Link</button>
+                <button className="btn-primary" onClick={() => { toast('Report link copied to clipboard!', 'success'); setShowShareModal(false); }}>Copy Link</button>
               </div>
               <div style={{ position: 'relative', textAlign: 'center', margin: '10px 0' }}>
                 <hr style={{ borderColor: 'var(--border)', borderStyle: 'solid' }} />
                 <span style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)', background: 'var(--bg-card)', padding: '0 10px', fontSize: 12, color: 'var(--text-muted)' }}>OR</span>
               </div>
-              <button className="btn-secondary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => { alert('Downloading PDF...'); setShowShareModal(false); }}>
+              <button className="btn-secondary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => { toast('Generating PDF report...', 'info'); setShowShareModal(false); }}>
                 <Download size={16} style={{marginRight: 8}}/> Download PDF Report
               </button>
             </div>

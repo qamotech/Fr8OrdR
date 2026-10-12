@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Send, Paperclip, Image, Smile } from 'lucide-react'
+import { useState, useCallback } from 'react'
+import { Send, Paperclip, Image } from 'lucide-react'
 
 const INITIAL_MESSAGES = [
   { id: 1, from: 'mike', text: 'Hey Jodi, I just dropped off the load in Chicago. Uploading BOL now.', time: '2:30 PM' },
@@ -7,26 +7,45 @@ const INITIAL_MESSAGES = [
   { id: 3, from: 'mike', text: 'Thanks babe. Fuel stop in Gary, IN then heading to Memphis. ETA 11pm.', time: '2:35 PM' },
 ]
 
+const QUICK_DISPATCH_RESPONSES = [
+  '10-4 Load Confirmed',
+  'BOL Verified & Uploaded',
+  'Traffic Delay Noted',
+  'Fuel Stop Approved',
+  'Next Rate Con Dispatched'
+]
+
+let messageIdSequence = 100
+function createMessageRecord(from, text) {
+  messageIdSequence += 1
+  const now = new Date()
+  const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+  return { id: messageIdSequence, from, text, time }
+}
+
 export default function Messages() {
   const [messages, setMessages] = useState(INITIAL_MESSAGES)
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
 
-  const sendMessage = () => {
-    if (!input.trim()) return
-    const newMsg = { id: Date.now(), from: 'jodi', text: input, time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }
+  const sendText = useCallback((text) => {
+    if (!text.trim()) return
+    const newMsg = createMessageRecord('jodi', text)
     setMessages(prev => [...prev, newMsg])
     setInput('')
     
     // Simulate Mike typing and replying
     setTyping(true)
+    const replies = ['10-4, got it!', "Sounds good, I'll handle it.", 'Copy that. Heading out now.', 'Will do. On it!']
+    const chosenReply = replies[messageIdSequence % replies.length]
     setTimeout(() => {
       setTyping(false)
-      const replies = ['10-4, got it!', 'Sounds good, I\'ll handle it.', 'Copy that. Heading out now.', 'Will do. Love you!']
-      const reply = { id: Date.now() + 1, from: 'mike', text: replies[Math.floor(Math.random() * replies.length)], time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }
+      const reply = createMessageRecord('mike', chosenReply)
       setMessages(prev => [...prev, reply])
-    }, 1500 + Math.random() * 1500)
-  }
+    }, 1500)
+  }, [])
+
+  const sendMessage = () => sendText(input)
 
   return (
     <div className="animate-fade-in" style={{ height: 'calc(100vh - 200px)', display: 'flex', flexDirection: 'column' }}>
@@ -36,7 +55,7 @@ export default function Messages() {
       </div>
       <div className="glass-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {messages.map((msg, i) => (
+          {messages.map(msg => (
             <div key={msg.id} className="animate-slide-up" style={{
               alignSelf: msg.from === 'jodi' ? 'flex-end' : 'flex-start',
               background: msg.from === 'jodi' ? 'var(--primary)' : 'var(--bg-card)',
@@ -63,6 +82,21 @@ export default function Messages() {
             </div>
           )}
         </div>
+
+        {/* Quick Dispatch Response Chips */}
+        <div style={{ padding: '8px 14px', borderTop: '1px solid var(--border)', display: 'flex', gap: '8px', overflowX: 'auto', background: 'var(--input-bg)' }}>
+          {QUICK_DISPATCH_RESPONSES.map(chip => (
+            <button
+              key={chip}
+              className="btn-secondary"
+              style={{ fontSize: 11, padding: '3px 9px', whiteSpace: 'nowrap', borderRadius: 12 }}
+              onClick={() => sendText(chip)}
+            >
+              ⚡ {chip}
+            </button>
+          ))}
+        </div>
+
         <div style={{ padding: '14px', borderTop: '1px solid var(--border)', display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button className="btn-secondary" style={{ padding: 7, borderRadius: '50%' }}><Paperclip size={16} /></button>
           <button className="btn-secondary" style={{ padding: 7, borderRadius: '50%' }}><Image size={16} /></button>
@@ -71,7 +105,7 @@ export default function Messages() {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && sendMessage()}
-            placeholder="Type a message to Mike..."
+            placeholder="Type a message to Mike... (Enter to send)"
             style={{ flex: 1, background: 'var(--input-bg)', border: '1px solid var(--border)', borderRadius: '24px', padding: '10px 18px', color: 'var(--text-main)', outline: 'none', fontFamily: 'inherit', fontSize: 13 }}
           />
           <button className="btn-primary" onClick={sendMessage} style={{ borderRadius: '50%', width: 40, height: 40, padding: 0 }}>

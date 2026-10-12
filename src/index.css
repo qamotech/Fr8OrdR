@@ -74,6 +74,7 @@ body {
   border-radius: 16px;
   box-shadow: var(--glass-shadow);
   transition: border-color 0.3s ease;
+  isolation: isolate;
 }
 
 .glass-card {
@@ -83,6 +84,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 12px;
   transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.35s ease, border-color 0.3s ease;
+  isolation: isolate;
 }
 .glass-card:hover {
   transform: translateY(-6px);
@@ -836,3 +838,14 @@ body {
 @media (max-width: 480px) {
   .grid-cards { grid-template-columns: 1fr; }
 }
+
+/* ═══ Accessibility Standards — Reduced Motion ═══ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
