@@ -44,6 +44,7 @@ function App() {
     return 'dark'
   })
   const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 1024)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const navigate = useNavigate()
 
   const [showShortcuts, setShowShortcuts] = useState(false)
@@ -164,9 +165,10 @@ function App() {
     <ErrorBoundary>
       <ToastProvider>
         <div className="app-layout">
-          <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
+          <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} mobileOpen={mobileNavOpen} onNavigate={() => setMobileNavOpen(false)} />
+          {mobileNavOpen && <div className="sidebar-backdrop" onClick={() => setMobileNavOpen(false)} />}
           <div className="main-content">
-            <Header theme={theme} toggleTheme={toggleTheme} startDemo={() => setRunTour(true)} setSidebarCollapsed={setSidebarCollapsed} sidebarCollapsed={sidebarCollapsed} />
+            <Header theme={theme} toggleTheme={toggleTheme} startDemo={() => setRunTour(true)} setSidebarCollapsed={setSidebarCollapsed} sidebarCollapsed={sidebarCollapsed} onMenuToggle={() => setMobileNavOpen(v => !v)} mobileNavOpen={mobileNavOpen} />
             <div className="scroll-area">
               <Suspense fallback={<GlobalLoader />}>
                 <Routes>
