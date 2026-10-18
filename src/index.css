@@ -871,6 +871,37 @@ body {
 }
 @media (max-width: 768px) { .fab { display: flex; } }
 
+/* ═══ Mobile Navigation (hamburger + off-canvas sidebar) ═══ */
+.menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-backdrop {
+  display: none;
+}
+@media (max-width: 768px) {
+  .menu-btn {
+    display: flex;
+  }
+  .sidebar {
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    box-shadow: 24px 0 48px rgba(0,0,0,0.35);
+  }
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    z-index: 99;
+    animation: tourFadeIn 0.2s ease forwards;
+  }
+  .header-title-row {
+    width: 100%;
+  }
+}
+
 /* ═══ Responsive ═══ */
 @media (max-width: 1024px) {
   .dashboard-grid { grid-template-columns: 1fr; }
