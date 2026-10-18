@@ -127,6 +127,7 @@ export default function DemoTour({ active, onClose }) {
   const navigate = useNavigate()
   const location = useLocation()
   const autoPlayTimerRef = useRef(null)
+  const tourOpenedSidebar = useRef(false)
 
   const currentStep = TOUR_STEPS[stepIndex]
 
@@ -135,6 +136,20 @@ export default function DemoTour({ active, onClose }) {
     if (!active || isCompleted || !currentStep) return
 
     const el = document.querySelector(currentStep.selector)
+
+    // Mobile: auto-open the off-canvas sidebar when a step targets it,
+    // so the highlight ring lands on something visible
+    const sidebarEl = el?.closest('.sidebar')
+    const isMobileViewport = window.innerWidth <= 768
+    const sidebarDom = document.querySelector('.sidebar')
+    if (sidebarEl && isMobileViewport && sidebarDom && !sidebarDom.classList.contains('mobile-open')) {
+      sidebarDom.classList.add('mobile-open')
+      tourOpenedSidebar.current = true
+    } else if (!sidebarEl && tourOpenedSidebar.current && sidebarDom) {
+      sidebarDom.classList.remove('mobile-open')
+      tourOpenedSidebar.current = false
+    }
+
     if (!el) {
       setTargetRect(null)
       setTooltipPos({
@@ -235,6 +250,10 @@ export default function DemoTour({ active, onClose }) {
     setIsCompleted(false)
     setStepIndex(0)
     setAutoPlay(false)
+    if (tourOpenedSidebar.current) {
+      document.querySelector('.sidebar')?.classList.remove('mobile-open')
+      tourOpenedSidebar.current = false
+    }
     navigate('/')
     onClose()
   }, [navigate, onClose])
