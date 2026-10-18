@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import { ToastProvider } from './components/ToastProvider'
 import MusicWidget from './components/MusicWidget'
 import ErrorBoundary from './components/ErrorBoundary'
+import DemoTour from './components/DemoTour'
 
 // Lazy loaded pages for performance (Improvement 38)
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -46,6 +47,14 @@ function App() {
   const navigate = useNavigate()
 
   const [showShortcuts, setShowShortcuts] = useState(false)
+  const [runTour, setRunTour] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search)
+      return params.get('demo') === 'true' || params.get('tour') === 'true'
+    } catch {
+      return false
+    }
+  })
 
   const toggleTheme = useCallback(() => {
     setTheme(t => {
@@ -95,6 +104,12 @@ function App() {
       if (e.key === 't' || e.key === 'T') {
         e.preventDefault()
         toggleTheme()
+        return
+      }
+
+      if (e.key === 'p' || e.key === 'P') {
+        e.preventDefault()
+        setRunTour(prev => !prev)
         return
       }
 
@@ -151,7 +166,7 @@ function App() {
         <div className="app-layout">
           <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
           <div className="main-content">
-            <Header theme={theme} toggleTheme={toggleTheme} setSidebarCollapsed={setSidebarCollapsed} sidebarCollapsed={sidebarCollapsed} />
+            <Header theme={theme} toggleTheme={toggleTheme} startDemo={() => setRunTour(true)} setSidebarCollapsed={setSidebarCollapsed} sidebarCollapsed={sidebarCollapsed} />
             <div className="scroll-area">
               <Suspense fallback={<GlobalLoader />}>
                 <Routes>
@@ -176,6 +191,7 @@ function App() {
             </div>
           </div>
           <MusicWidget />
+          <DemoTour active={runTour} onClose={() => setRunTour(false)} />
 
           {/* Quick Shortcuts Cheat-Sheet Modal */}
           {showShortcuts && (
@@ -199,6 +215,9 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, fontSize: 13 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', background: 'var(--input-bg)', borderRadius: 8 }}>
                     <span>Focus Search</span> <kbd style={{ padding: '2px 6px', background: 'var(--bg-card)', borderRadius: 4, fontWeight: 700 }}>/</kbd>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', background: 'var(--input-bg)', borderRadius: 8 }}>
+                    <span>Play Demo Tour</span> <kbd style={{ padding: '2px 6px', background: 'var(--bg-card)', borderRadius: 4, fontWeight: 700, color: 'var(--primary)' }}>P</kbd>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', background: 'var(--input-bg)', borderRadius: 8 }}>
                     <span>Toggle Theme</span> <kbd style={{ padding: '2px 6px', background: 'var(--bg-card)', borderRadius: 4, fontWeight: 700 }}>T</kbd>

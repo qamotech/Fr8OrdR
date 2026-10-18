@@ -41,6 +41,7 @@ Open the address printed by the development server. The manifest is the source o
 | `npm run dev` | `vite` |
 | `npm run build` | `vite build` |
 | `npm run lint` | `oxlint` |
+| `npm test` | `python tests/test_demo_tour.py` |
 | `npm run preview` | `vite preview` |
 
 Install/build scripts can execute code. Inspect project configuration and keep secrets in local configuration excluded from Git. No dependency installation or application build was performed for this documentation update.

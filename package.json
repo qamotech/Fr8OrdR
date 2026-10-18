@@ -7,6 +7,7 @@
     "dev": "vite dev.html",
     "build": "node scripts/build.js",
     "lint": "oxlint src",
+    "test": "python tests/test_demo_tour.py",
     "preview": "vite preview"
   },
   "dependencies": {

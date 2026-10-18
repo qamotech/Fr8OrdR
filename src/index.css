@@ -888,13 +888,89 @@ body {
   .grid-cards { grid-template-columns: 1fr; }
 }
 
-/* ═══ Accessibility Standards — Reduced Motion ═══ */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* ═══ Accessibility Standards & ContinuumOS Web Tokens ═══ */
+:focus-visible {
+  outline: 2px solid #22d3ee !important;
+  outline-offset: 2px !important;
+}
+
+:root {
+  --a11y-touch-min: 44px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ═══ Interactive Guided Demo Tour Styles ═══ */
+.tour-container {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.tour-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 20, 0.72);
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+  cursor: pointer;
+  animation: tourFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.tour-spotlight-frame {
+  position: fixed;
+  border: 2px solid #22d3ee;
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(4, 7, 20, 0.72), 0 0 24px rgba(34, 211, 238, 0.5);
+  pointer-events: none;
+  z-index: 10001;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tour-tooltip {
+  position: fixed;
+  z-index: 10002;
+  pointer-events: auto;
+  padding: 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tour-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.tour-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #22d3ee;
+}
+
+.active-autoplay {
+  background: var(--primary) !important;
+  color: #060a17 !important;
+  font-weight: 700 !important;
+}
+
+@keyframes tourFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 

@@ -1,4 +1,4 @@
-import { Bell, Search, Sun, Moon, Clock } from 'lucide-react'
+import { Bell, Search, Sun, Moon, Clock, Play } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -21,7 +21,7 @@ const NOTIFICATIONS = [
 
 export const JODI_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff914d'/%3E%3Cstop offset='100%25' stop-color='%23ff6b35'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='80' height='80' rx='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='32' r='14' fill='%23ffffff' opacity='0.9'/%3E%3Cpath d='M20 66 C20 48 60 48 60 66 Z' fill='%23ffffff' opacity='0.9'/%3E%3C/svg%3E"
 
-export default function Header({ theme, toggleTheme }) {
+export default function Header({ theme, toggleTheme, startDemo }) {
   const [showNotifs, setShowNotifs] = useState(false)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [notifCount, setNotifCount] = useState(NOTIFICATIONS.length)
@@ -91,6 +91,32 @@ export default function Header({ theme, toggleTheme }) {
           <div className="pulse-glow" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--success)' }}></div>
           <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)' }}>Online</span>
         </div>
+
+        {/* Interactive Guided Tour / Demo Sequence Trigger */}
+        <button
+          id="demo-tour-btn"
+          className="demo-start-btn hover-scale"
+          onClick={startDemo}
+          title="Launch Interactive Demo Tour"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '6px 14px',
+            fontSize: 12,
+            fontWeight: 700,
+            borderRadius: 8,
+            cursor: 'pointer',
+            border: 'none',
+            background: 'linear-gradient(135deg, var(--primary), #22d3ee)',
+            color: '#060a17',
+            boxShadow: '0 0 16px rgba(34, 211, 238, 0.35)',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          <Play size={12} fill="#060a17" />
+          <span>Play Demo</span>
+        </button>
 
         <div className="search-bar" style={{ position: 'relative' }}>
           <Search size={16} color="var(--text-muted)" />
