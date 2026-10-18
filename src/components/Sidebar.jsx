@@ -24,16 +24,16 @@ const LogoMark = () => (
   </svg>
 )
 
-export default function Sidebar({ collapsed, setCollapsed }) {
+export default function Sidebar({ collapsed, setCollapsed, mobileOpen, onNavigate }) {
   return (
-    <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+    <div className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
       <div className="brand" onClick={() => setCollapsed(!collapsed)} title="Toggle Sidebar">
         <div className="brand-icon truck-drive">
           <LogoMark />
         </div>
         <span>Fr8OrdR</span>
       </div>
-      <div className="nav-links">
+      <div className="nav-links" onClick={onNavigate}>
         <div className="nav-section">Dispatch</div>
         <NavLink to="/" end title="Dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
           <LayoutDashboard size={19} />
